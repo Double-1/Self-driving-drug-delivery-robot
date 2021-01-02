@@ -1,0 +1,124 @@
+Neural Network Tools for STM32 v1.4.0 (AI tools v5.2.0)
+Created date       : 2021-01-03 04:46:43
+Parameters         : generate --name facerecognition -m C:/Users/s_dnjswldb98/Downloads/faceRecognition.tflite --type tflite --compression 4 --verbosity 1 --workspace C:\Users\S_DNJS~1\AppData\Local\Temp\mxAI_workspace66701664432823868490326797105524 --output C:\Users\s_dnjswldb98\.stm32cubemx
+
+Exec/report summary (generate dur=0.87s err=0)
+------------------------------------------------------------------------------------------------------------------------
+model file         : C:\Users\s_dnjswldb98\Downloads\faceRecognition.tflite
+type               : tflite (tflite) 
+c_name             : facerecognition
+compression        : 4
+quantize           : None
+workspace dir      : C:\Users\S_DNJS~1\AppData\Local\Temp\mxAI_workspace66701664432823868490326797105524
+output dir         : C:\Users\s_dnjswldb98\.stm32cubemx
+
+model_name         : faceRecognition
+model_hash         : 8eb2c174805b8fda5a3f45ca95f92915
+input              : serving_default_x_input0 [27648 items, 108.00 KiB, ai_float, FLOAT32, (96, 96, 3)]
+inputs (total)     : 108.00 KiB
+output             : nl_6 [2 items, 8 B, ai_float, FLOAT32, (1, 1, 2)]
+outputs (total)    : 8 B
+params #           : 23,954 items (93.57 KiB)
+macc               : 19,261,518
+weights (ro)       : 41,544 B (40.57 KiB) (-56.64%) 
+activations (rw)   : 319,488 B (312.00 KiB) 
+ram (total)        : 430,088 B (420.01 KiB) = 319,488 + 110,592 + 8
+
+------------------------------------------------------------------------------------------------------------------------
+id  layer (type)                     output shape      param #     connected to             macc           rom                
+------------------------------------------------------------------------------------------------------------------------
+0   serving_default_x_input0 (Input) (96, 96, 3)                                                                              
+    conv2d_0 (Conv2D)                (96, 96, 32)      896         serving_default_x_input0 8,552,480      3,584              
+    nl_0 (Nonlinearity)              (96, 96, 32)                  conv2d_0                                                   
+------------------------------------------------------------------------------------------------------------------------
+1   pool_1 (Pool)                    (48, 48, 32)                  nl_0                                                       
+------------------------------------------------------------------------------------------------------------------------
+2   conv2d_2 (Conv2D)                (48, 48, 16)      4,624       pool_1                   10,690,576     18,496             
+    nl_2 (Nonlinearity)              (48, 48, 16)                  conv2d_2                                                   
+------------------------------------------------------------------------------------------------------------------------
+3   pool_3 (Pool)                    (24, 24, 16)                  nl_2                                                       
+------------------------------------------------------------------------------------------------------------------------
+4   reshape_4 (Reshape)              (9216,)                       pool_3                                                     
+------------------------------------------------------------------------------------------------------------------------
+5   dense_5 (Dense)                  (2,)              18,434      reshape_4                18,432         19,464 (c)         
+------------------------------------------------------------------------------------------------------------------------
+6   nl_6 (Nonlinearity)              (2,)                          dense_5                  30                                
+------------------------------------------------------------------------------------------------------------------------
+faceRecognition p=23954(93.57 KBytes) macc=19261518 rom=40.57 KBytes (-56.64%) ram=312.00 KiB io_ram=108.01 KiB
+
+
+
+Generated C-graph summary
+------------------------------------------------------------------------------------------------------------------------
+model name         : facerecognition
+c-name             : facerecognition
+c-node #           : 4
+c-array #          : 13
+activations size   : 319488
+weights size       : 41544
+macc               : 19261518
+inputs             : ['serving_default_x_input0_output_array']
+outputs            : ['nl_6_output_array']
+
+
+C-Arrays (13)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_array)                   item/size           mem-pool     c-type       fmt        comment            
+------------------------------------------------------------------------------------------------------------------------
+0     conv2d_2_scratch0                1536/6144           activations  float        float                         
+1     conv2d_0_scratch0                6144/24576          activations  float        float                         
+2     dense_5_bias                     2/8                 weights      const float  float                         
+3     dense_5_weights                  18432/19456         weights      const float  c4 (LUT8)                     
+4     conv2d_2_bias                    16/64               weights      const float  float                         
+5     conv2d_2_weights                 4608/18432          weights      const float  float                         
+6     conv2d_0_bias                    32/128              weights      const float  float                         
+7     conv2d_0_weights                 864/3456            weights      const float  float                         
+8     serving_default_x_input0_output  27648/110592        user         float        float      /input             
+9     conv2d_0_output                  73728/294912        activations  float        float                         
+10    conv2d_2_output                  9216/36864          activations  float        float                         
+11    dense_5_output                   2/8                 activations  float        float                         
+12    nl_6_output                      2/8                 user         float        float      /output            
+------------------------------------------------------------------------------------------------------------------------
+
+
+C-Layers (4)
+------------------------------------------------------------------------------------------------------------------------
+c_id  name (*_layer)  id  type              macc        rom         tensors                             shape (array id)                       
+------------------------------------------------------------------------------------------------------------------------
+0     conv2d_0        0   optimized_conv2d  8552480     3584        I: serving_default_x_input0_output  [1, 96, 96, 3] (8)                     
+                                                                    S: conv2d_0_scratch0                                                       
+                                                                    W: conv2d_0_weights                                                        
+                                                                    W: conv2d_0_bias                                                           
+                                                                    O: conv2d_0_output                  [1, 48, 48, 32] (9)                    
+------------------------------------------------------------------------------------------------------------------------
+1     conv2d_2        2   optimized_conv2d  10690576    18496       I: conv2d_0_output                  [1, 48, 48, 32] (9)                    
+                                                                    S: conv2d_2_scratch0                                                       
+                                                                    W: conv2d_2_weights                                                        
+                                                                    W: conv2d_2_bias                                                           
+                                                                    O: conv2d_2_output                  [1, 24, 24, 16] (10)                   
+------------------------------------------------------------------------------------------------------------------------
+2     dense_5         5   dense             18432       19464       I: conv2d_2_output0                 [1, 1, 1, 9216] (10)                   
+                                                                    W: dense_5_weights                                                         
+                                                                    W: dense_5_bias                                                            
+                                                                    O: dense_5_output                   [1, 1, 1, 2] (11)                      
+------------------------------------------------------------------------------------------------------------------------
+3     nl_6            6   nl                30          0           I: dense_5_output                   [1, 1, 1, 2] (11)                      
+                                                                    O: nl_6_output                      [1, 1, 1, 2] (12)                      
+------------------------------------------------------------------------------------------------------------------------
+
+
+ 
+Complexity per-layer - macc=19,261,518 rom=41,544
+------------------------------------------------------------------------------------------------------------------------
+id      layer (type)                     macc                                    rom                                    
+------------------------------------------------------------------------------------------------------------------------
+0       conv2d_0 (Conv2D)                |||||||||||||||||||||||||        44.4%  ||||||                            8.6% 
+2       conv2d_2 (Conv2D)                |||||||||||||||||||||||||||||||  55.5%  |||||||||||||||||||||||||||||    44.5% 
+5       dense_5 (Dense)                  |                                 0.1%  |||||||||||||||||||||||||||||||  46.9% 
+6       nl_6 (Nonlinearity)              |                                 0.0%  |                                 0.0% 
+------------------------------------------------------------------------------------------------------------------------
+
+
+Evaluation report (summary)
+---------------------------------------------
+NOT EVALUATED
