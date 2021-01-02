@@ -8,8 +8,8 @@ Therefore, we noted that by using autonomous driving robots, it is possible to s
 ## Tech
 **STM32 (CubeAI)** 
 Generate the model that can recognize faces and upload it on the stm32 board.
-![faceRecognition_layer](./Img/faceRecognition_layer.jpg)
-The layer consists of 2 convolution layer and a dense layer
+![faceRecognition_layer](./Img/faceRecognition_Layers.JPG)
+The layer consists of 2 convolution layer and a dense layer. For each convolution and dense layer, nonlinearity step.
 
 **RaspberryPi**
 
