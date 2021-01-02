@@ -32,14 +32,34 @@ _EN_R_B = 11
 _IN3_R = 10
 _IN4_R = 9
 
-senario = [0b1000,0b1100,0b0100,0b0000,0b0010,0b0011,0b0001]
+LED1 = 13
+LED2 = 0
+LED3 = 6
+LED4 = 5
+
+senario = [0b0111,0b1100,0b1011,0b1111,0b1101,0b0011,0b1110,0b1001]
+
+def setLEDConfig(led1,led2,led3,led4):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(led1, GPIO.IN)
+    GPIO.setup(led2, GPIO.IN)
+    GPIO.setup(led3, GPIO.IN)
+    GPIO.setup(led4, GPIO.IN)
+
+def setPinConfig(ENA, IN1, IN2):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(ENA, GPIO.OUT)
+    GPIO.setup(IN1, GPIO.OUT)
+    pwm = GPIO.PWM(ENA, 500)
+    pwm.start(0)
+    return pwm
+
 def setMotorContorl(PWM, IN1, IN2, speed, stat):
 
     PWM.ChangeDutyCycle(speed)
     print("Current speed is", speed)
 
     if stat == FORWARD:
-        print("FOWARD")
         GPIO.output(IN1, HIGH)
         GPIO.output(IN2, LOW)
 
@@ -62,6 +82,7 @@ def setMotor(ch, speed, stat):
     if ch == CH1:
         setMotorContorl(pwmA, _IN1,_IN2, speed, stat)
     elif ch == CH3:
+        #print("CH3")
         setMotorContorl(pwm_R_A, _IN1_R, _IN2_R, speed, stat)
     elif ch == CH4:
         setMotorContorl(pwm_R_B, _IN3_R, _IN4_R, speed, stat)
@@ -70,82 +91,109 @@ def setMotor(ch, speed, stat):
 
 def checkSenario(state):
 
-   #0b1000
+   #0b0111
    if state == senario[0]:
-        setMotor(CH1,0,STOP)
-        setMotor(CH2,40,FORWARD)
-        setMotor(CH3,40,FORWARD)
-        setMotor(CH4,0,STOP)
-        time.sleep(2)
+        setMotor(CH1,80,FORWARD)
+        setMotor(CH3,60,BACKWARD)
+        #time.sleep(0.5)
+        setMotor(CH2,60,BACKWARD)
+        setMotor(CH4,80,FORWARD)
+        time.sleep(1)
 
    #0b1100
    elif state == senario[1]:
-        setMotor(CH1,30,FORWARD)
-        setMotor(CH2,35,FORWARD)
-        setMotor(CH3,35,FORWARD)
-        setMotor(CH4,30,FORWARD)
-        time.sleep(2)
-   #0b0100
+        setMotor(CH1,55,BACKWARD)        
+	setMotor(CH3,70,FORWARD)
+        setMotor(CH2,70,FORWARD)
+        setMotor(CH4,55,BACKWARD)
+        time.sleep(1)
+
+   #0b1011
    elif state == senario[2]:
-        setMotor(CH1,40,FORWARD)
-        setMotor(CH2,30,FORWARD)
-        setMotor(CH3,30,FORWARD)
-        setMotor(CH4,40,FORWARD)
-        time.sleep(2)
+        setMotor(CH1,70,FORWARD)
+        setMotor(CH3,55,FORWARD)
+        setMotor(CH2,55,FORWARD)
+        setMotor(CH4,70,FORWARD)
+        time.sleep(1)
 
-   #0b0000
+   #0b1111
    elif state == senario[3]:
-        setMotor(CH1,40,FORWARD)
-        setMotor(CH2,40,FORWARD)
-        setMotor(CH3,40,FORWARD)
-        setMotor(CH4,40,FORWARD)
-        time.sleep(2)
+        setMotor(CH1,95,FORWARD)
+        setMotor(CH3,100,FORWARD)
+        setMotor(CH4,100,FORWARD)
+        setMotor(CH2,95,FORWARD)
+        time.sleep(1)
 
-   #0b0010
-   elif state == senario[4]:
-        setMotor(CH1,30,FORWARD)
-        setMotor(CH2,40,FORWARD)
-        setMotor(CH3,40,FORWARD)
-        setMotor(CH4,30,FORWARD)
-        time.sleep(2)
+   #0b1101
+ elif state == senario[4]:
+        setMotor(CH1,95,FORWARD)
+        setMotor(CH3,90,FORWARD)
+        setMotor(CH2,90,FORWARD)
+        setMotor(CH4,95,FORWARD)
+        time.sleep(1)
 
    #0b0011
    elif state == senario[5]:
-        setMotor(CH1,30,FORWARD)
-        setMotor(CH2,35,FORWARD)
-        setMotor(CH3,35,FORWARD)
-        setMotor(CH4,30,FORWARD)
-        time.sleep(2)
+        setMotor(CH1,100,FORWARD)
+        setMotor(CH3,70,BACKWARD)
+        setMotor(CH2,70,BACKWARD)
+        setMotor(CH4,100,FORWARD)
+        time.sleep(1)
 
-   #0b0001
+   #0b1110
    elif state == senario[6]:
-        setMotor(CH1,40,FORWARD)
-        setMotor(CH2,0 ,FORWARD)
-        setMotor(CH3,0 ,FORWARD)
-        setMotor(CH4,40,FORWARD)
-        time.sleep(2)
+        setMotor(CH1,80,BACKWARD)
+        setMotor(CH3,100,FORWARD)
+        setMotor(CH2,100,FORWARD)
+        setMotor(CH4,80,BACKWARD)
+        time.sleep(1)
 
+   #0b1001
+   elif state == senario[7]:
+        setMotor(CH1,80,FORWARD)
+        setMotor(CH3,80,FORWARD)
+        setMotor(CH2,80,FORWARD)
+        setMotor(CH4,80,FORWARD)
+        time.sleep(1)
    #STOP
    else:
         setMotor(CH1, 0, STOP)
-        setMotor(CH2, 0, STOP)
         setMotor(CH3, 0, STOP)
+        setMotor(CH2, 0, STOP)
         setMotor(CH4, 0, STOP)
-        time.sleep(2)
+        time.sleep(1)
 
 print("====START====")
+#GPIO.cleanup()
 
-pwmA = setPinConfig(_ENA, _IN1, _IN2)
-pwmB = setPinConfig(_ENB, _IN3, _IN4)
-pwm_R_A = setPinConfig(_EN_R_A, _IN1_R, _IN2_R)
-pwm_R_B = setPinConfig(_EN_R_B, _IN3_R, _IN4_R)
+try :
+        pwmA = setPinConfig(_ENA, _IN1, _IN2)
+        pwmB = setPinConfig(_ENB, _IN3, _IN4)
+        pwm_R_A = setPinConfig(_EN_R_A, _IN1_R, _IN2_R)
+        pwm_R_B = setPinConfig(_EN_R_B, _IN3_R, _IN4_R)
+        setLEDConfig(LED1,LED2,LED3,LED4)
 
-setMotor(CH1, 0, STOP)
-setMotor(CH2, 0, STOP)
-setMotor(CH3, 0, STOP)
-setMotor(CH4, 0, STOP)
+        while True :
+                time.sleep(0.5)
+                led1_out = GPIO.input(LED1)
+                led2_out = GPIO.input(LED2)
+                led3_out = GPIO.input(LED3)
+                led4_out = GPIO.input(LED4)
+                print(led1_out, led2_out, led3_out, led4_out)
 
-GPIO.cleanup()
+                senario_state = led1_out*8 + led2_out*4 + led$
+                print(senario_state)
+
+                checkSenario(senario_state)
+
+except:
+        print("exception")
+        GPIO.cleanup()
+#setMotor(CH1, 0, STOP)
+#setMotor(CH2, 0, STOP)
+#setMotor(CH3, 0, STOP)
+#setMotor(CH4, 0, STOP)
+
+#GPIO.cleanup()
 
 print("====END====")
-
