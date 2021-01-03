@@ -12,11 +12,13 @@ Generate the model that can recognize faces and upload it on the stm32 board.
 The layer consists of 2 convolution layer and a dense layer. For each convolution and dense layer, nonlinearity step.
 
 **RaspberryPi**
+Detects the line and moves it to the designated position through motor control.
+Implemented to be able to move by controlling a total of 4 motors.
+
 
 ## Hardware
 **STM32 (CubeAI)** 
 * Face detection
-* Humidifier module
 
 **RaspberryPi**
 * Line detection 
